@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAM MOTORS | Stock Sebastián</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f6f8;
+      color: #222;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #ccc;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .search {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .stock-info {
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .vehicles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .vehicle {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .vehicle img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    .vehicle-info {
+      padding: 18px;
+    }
+
+    .vehicle h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .vehicle p {
+      margin: 6px 0;
+      color: #555;
+    }
+
+    .price {
+      font-size: 21px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      margin-top: 40px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🚗 RAM MOTORS</h1>
+  <p>Stock Sebastián Sepúlveda</p>
+</header>
+
+<div class="container">
+
+  <div class="search">
+    <input
+      type="text"
+      id="buscador"
+      placeholder="🔎 Buscar marca, modelo o año..."
+      onkeyup="buscarVehiculo()"
+    >
+  </div>
+
+  <div class="stock-info">
+    🚗 Vehículos disponibles: <span id="cantidad">3</span>
+  </div>
+
+  <div class="vehicles" id="vehiculos">
+
+    <div class="vehicle" data-search="suzuki baleno 2019">
+      <img src="https://via.placeholder.com/600x400?text=Suzuki+Baleno">
+      <div class="vehicle-info">
+        <h2>Suzuki Baleno 2019</h2>
+        <p>⚙️ Automático</p>
+        <p>⛽ Bencina</p>
+        <p>📏 85.000 km</p>
+        <div class="price">$8.990.000</div>
+        <button onclick="alert('Publicación lista para generar')">
+          🤖 Generar publicación
+        </button>
+      </div>
+    </div>
+
+    <div class="vehicle" data-search="jac js2 2023">
+      <img src="https://via.placeholder.com/600x400?text=JAC+JS2">
+      <div class="vehicle-info">
+        <h2>JAC JS2 2023</h2>
+        <p>⚙️ Automático</p>
+        <p>⛽ Bencina</p>
+        <p>📏 40.000 km</p>
+        <div class="price">$10.990.000</div>
+        <button onclick="alert('Publicación lista para generar')">
+          🤖 Generar publicación
+        </button>
+      </div>
+    </div>
+
+    <div class="vehicle" data-search="suzuki alto 2018">
+      <img src="https://via.placeholder.com/600x400?text=Suzuki+Alto">
+      <div class="vehicle-info">
+        <h2>Suzuki Alto 2018</h2>
+        <p>⚙️ Manual</p>
+        <p>⛽ Bencina</p>
+        <p>📏 101.450 km</p>
+        <div class="price">$4.990.000</div>
+        <button onclick="alert('Publicación lista para generar')">
+          🤖 Generar publicación
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  RAM MOTORS · Stock Sebastián Sepúlveda
+</footer>
+
+<script>
+function buscarVehiculo() {
+
+  const texto = document
+    .getElementById("buscador")
+    .value
+    .toLowerCase();
+
+  const vehiculos = document.querySelectorAll(".vehicle");
+
+  let encontrados = 0;
+
+  vehiculos.forEach(function(vehiculo) {
+
+    const datos = vehiculo
+      .getAttribute("data-search")
+      .toLowerCase();
+
+    if (datos.includes(texto)) {
+      vehiculo.style.display = "block";
+      encontrados++;
+    } else {
+      vehiculo.style.display = "none";
+    }
+
+  });
+
+  document.getElementById("cantidad").textContent = encontrados;
+}
+</script>
+
+</body>
+</html>
