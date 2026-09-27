@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "marca": "JAC",
+    "modelo": "JS2",
+    "año": "2023",
+    "version": "Luxury",
+    "motor": "1.5 Bencina",
+    "transmision": "Manual 5 velocidades",
+    "combustible": "Bencina",
+    "km": "77.800",
+    "precio": "$6.990.000",
+    "precioContado": "$7.490.000",
+    "imagen": "https://via.placeholder.com/600x400?text=JAC+JS2"
+  }
+]
