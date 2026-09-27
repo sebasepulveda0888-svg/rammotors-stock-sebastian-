@@ -111,10 +111,19 @@
       color: white;
       font-size: 15px;
       cursor: pointer;
+      margin-top: 8px;
     }
 
     button:hover {
       background: #333;
+    }
+
+    .mensaje {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      color: #666;
     }
 
     footer {
@@ -145,54 +154,12 @@
   </div>
 
   <div class="stock-info">
-    🚗 Vehículos disponibles: <span id="cantidad">3</span>
+    🚗 Vehículos disponibles:
+    <span id="cantidad">0</span>
   </div>
 
-  <div class="vehicles" id="vehiculos">
+  <div class="vehicles" id="vehiculos"></div>
 
-    <div class="vehicle" data-search="suzuki baleno 2019">
-      <img src="https://via.placeholder.com/600x400?text=Suzuki+Baleno">
-      <div class="vehicle-info">
-        <h2>Suzuki Baleno 2019</h2>
-        <p>⚙️ Automático</p>
-        <p>⛽ Bencina</p>
-        <p>📏 85.000 km</p>
-        <div class="price">$8.990.000</div>
-        <button onclick="alert('Publicación lista para generar')">
-          🤖 Generar publicación
-        </button>
-      </div>
-    </div>
-
-    <div class="vehicle" data-search="jac js2 2023">
-      <img src="https://via.placeholder.com/600x400?text=JAC+JS2">
-      <div class="vehicle-info">
-        <h2>JAC JS2 2023</h2>
-        <p>⚙️ Automático</p>
-        <p>⛽ Bencina</p>
-        <p>📏 40.000 km</p>
-        <div class="price">$10.990.000</div>
-        <button onclick="alert('Publicación lista para generar')">
-          🤖 Generar publicación
-        </button>
-      </div>
-    </div>
-
-    <div class="vehicle" data-search="suzuki alto 2018">
-      <img src="https://via.placeholder.com/600x400?text=Suzuki+Alto">
-      <div class="vehicle-info">
-        <h2>Suzuki Alto 2018</h2>
-        <p>⚙️ Manual</p>
-        <p>⛽ Bencina</p>
-        <p>📏 101.450 km</p>
-        <div class="price">$4.990.000</div>
-        <button onclick="alert('Publicación lista para generar')">
-          🤖 Generar publicación
-        </button>
-      </div>
-    </div>
-
-  </div>
 </div>
 
 <footer>
@@ -200,6 +167,114 @@
 </footer>
 
 <script>
+
+let stock = [];
+
+async function cargarStock() {
+
+  try {
+
+    const respuesta = await fetch("stock.json");
+
+    if (!respuesta.ok) {
+      throw new Error("No se pudo cargar stock.json");
+    }
+
+    stock = await respuesta.json();
+
+    mostrarVehiculos(stock);
+
+  } catch (error) {
+
+    console.error(error);
+
+    document.getElementById("vehiculos").innerHTML = `
+      <div class="mensaje">
+        ⚠️ No se pudo cargar el stock.
+      </div>
+    `;
+
+  }
+
+}
+
+
+function mostrarVehiculos(vehiculos) {
+
+  const contenedor = document.getElementById("vehiculos");
+
+  contenedor.innerHTML = "";
+
+  document.getElementById("cantidad").textContent = vehiculos.length;
+
+  if (vehiculos.length === 0) {
+
+    contenedor.innerHTML = `
+      <div class="mensaje">
+        🚗 No hay vehículos cargados todavía.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  vehiculos.forEach(function(vehiculo) {
+
+    const tarjeta = document.createElement("div");
+
+    tarjeta.className = "vehicle";
+
+    tarjeta.setAttribute(
+      "data-search",
+      `
+      ${vehiculo.marca || ""}
+      ${vehiculo.modelo || ""}
+      ${vehiculo.año || ""}
+      ${vehiculo.version || ""}
+      `.toLowerCase()
+    );
+
+
+    tarjeta.innerHTML = `
+
+      <img
+        src="${vehiculo.imagen || "https://via.placeholder.com/600x400?text=Ram+Motors"}"
+        alt="${vehiculo.marca || ""} ${vehiculo.modelo || ""}"
+      >
+
+      <div class="vehicle-info">
+
+        <h2>
+          ${vehiculo.marca || ""}
+          ${vehiculo.modelo || ""}
+          ${vehiculo.año || ""}
+        </h2>
+
+        <p>⚙️ ${vehiculo.transmision || "No informado"}</p>
+
+        <p>⛽ ${vehiculo.combustible || "No informado"}</p>
+
+        <p>📏 ${vehiculo.km || "No informado"} km</p>
+
+        <div class="price">
+          ${vehiculo.precio || "Precio consultar"}
+        </div>
+
+        <button onclick='generarPublicacion(${JSON.stringify(vehiculo)})'>
+          🤖 Generar publicación
+        </button>
+
+      </div>
+    `;
+
+    contenedor.appendChild(tarjeta);
+
+  });
+
+}
+
+
 function buscarVehiculo() {
 
   const texto = document
@@ -218,16 +293,61 @@ function buscarVehiculo() {
       .toLowerCase();
 
     if (datos.includes(texto)) {
+
       vehiculo.style.display = "block";
       encontrados++;
+
     } else {
+
       vehiculo.style.display = "none";
+
     }
 
   });
 
   document.getElementById("cantidad").textContent = encontrados;
+
 }
+
+
+function generarPublicacion(vehiculo) {
+
+  const texto = `
+
+Un vehículo cómodo, económico y versátil, ideal para la ciudad y el uso diario. 🚙✨
+
+➕5️⃣6️⃣9️⃣4️⃣5️⃣9️⃣9️⃣6️⃣4️⃣4️⃣3️⃣
+👔Ejecutivo Sebastián Sepúlveda
+
+**${vehiculo.marca || ""} ${vehiculo.modelo || ""} ${vehiculo.año || ""} ${vehiculo.version || ""}**
+
+☑️Motor ${vehiculo.motor || "No informado"}
+☑️Transmisión ${vehiculo.transmision || "No informado"}
+☑️${vehiculo.km || "No informado"} KM
+☑️${vehiculo.combustible || "No informado"}
+
+💲${vehiculo.precio || "Consultar"}-. precio crédito
+💲${vehiculo.precioContado || "Consultar"}-. precio contado
+
+📌Financiamiento automotriz
+📌Recibimos vehículos en parte de pago
+📌Compras y consignación
+
+❗️Más de 130 vehículos en stock
+
+📍Claro Solar #333 Temuco
+
+  `.trim();
+
+  navigator.clipboard.writeText(texto);
+
+  alert("✅ Publicación copiada al portapapeles");
+
+}
+
+
+cargarStock();
+
 </script>
 
 </body>
